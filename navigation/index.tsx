@@ -76,10 +76,10 @@ const HomeHeader = (props) => {
         source={{ uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg' }}
         style={{ width: 30, height: 30, borderRadius: 30 }}
       />
-      <Text style={{ flex: 1, textAlign: 'center', marginLeft: 50, fontWeight: 'bold' }}>Signal</Text>
-      <Feather name="camera" size={24} color="black" style={{ marginHorizontal: 10 }} />
+      <Text style={{ flex: 1, textAlign: 'center', marginLeft: 50, fontWeight: 'bold' }}>RumoR</Text>
+      <Feather name="camera" size={24} color="white" style={{ marginHorizontal: 10 }} />
       <Pressable onPress={() => navigation.navigate('UsersScreen')}>
-        <Feather name="edit-2" size={24} color="black" style={{ marginHorizontal: 10 }} />
+        <Feather name="edit-2" size={24} color="white" style={{ marginHorizontal: 10 }} />
       </Pressable>
     </View>
   )
