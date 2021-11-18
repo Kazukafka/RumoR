@@ -17,6 +17,7 @@ import ChatRoomScreen from '../screens/ChatRoomScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UsersScreen from '../screens/UsersScreen';
 
+import ChatRoomHeader from './ChatRoomHeader';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -43,10 +44,10 @@ function RootNavigator() {
       <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}
-        options={{
-          headerTitle: ChatRoomHeader,
+        options={({ route }) => ({
+          headerTitle: () => <ChatRoomHeader id={route.params?.id} />,
           headerBackTitleVisible: false,
-        }}
+        })}
       />
       <Stack.Screen
         name="UsersScreen"
@@ -85,26 +86,3 @@ const HomeHeader = (props) => {
   )
 };
 
-const ChatRoomHeader = (props) => {
-  const { width } = useWindowDimensions();
-
-
-  return (
-    <View style={{
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: width - 25,
-      marginLeft: 25,
-      padding: 10,
-      alignItems: 'center',
-    }}>
-      <Image
-        source={{ uri: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0a402963-ac09-48a2-a194-fa5e34e3cfd5/de3lbnb-e1c66dc3-182c-4f27-acf7-d1c5a2f6d02b.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzBhNDAyOTYzLWFjMDktNDhhMi1hMTk0LWZhNWUzNGUzY2ZkNVwvZGUzbGJuYi1lMWM2NmRjMy0xODJjLTRmMjctYWNmNy1kMWM1YTJmNmQwMmIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.PeXeP3RbjOb-S8eWfEy3WlCRgCT7bsqxlqPaz5FVOfg' }}
-        style={{ width: 30, height: 30, borderRadius: 30 }}
-      />
-      <Text style={{ flex: 1, marginLeft: 10, fontWeight: 'bold' }}>{props.children}</Text>
-      <Feather name="camera" size={24} color="black" style={{ marginHorizontal: 10 }} />
-      <Feather name="edit-2" size={24} color="black" style={{ marginHorizontal: 10 }} />
-    </View>
-  )
-}

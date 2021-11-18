@@ -13,16 +13,12 @@ export default function ChatRoomItem({ chatRoom }) {
   const [lastMessage, setLastMessage] = useState<Message | undefined>();
 
   const navigation = useNavigation();
-  console.log(chatRoom);
 
   useEffect(() => {
     const fetchUsers = async () => {
       const fetchedUsers = (await DataStore.query(ChatRoomUser))
         .filter(chatRoomUser => chatRoomUser.chatroom.id === chatRoom.id)
         .map(chatRoomUser => chatRoomUser.user);
-
-      // console.log(fetchedUsers);
-      // setUsers(fetchedUsers); //
 
       const authUser = await Auth.currentAuthenticatedUser();
       // user => user.id !== authUser.attributes.subが===だと自分の画像になる
