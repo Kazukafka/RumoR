@@ -12,9 +12,11 @@ import { SimpleLineIcons, Feather, MaterialCommunityIcons, AntDesign, Ionicons }
 import { DataStore } from '@aws-amplify/datastore';
 import { ChatRoom, Message } from '../../src/models';
 import { Auth } from 'aws-amplify';
+import EmojiSelector from 'react-native-emoji-selector';
 
 const MessageInput = ({ chatRoom }) => {
   const [message, setMessage] = useState('');
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
 
   const sendMessage = async () => {
     // send message
@@ -30,6 +32,7 @@ const MessageInput = ({ chatRoom }) => {
     updateLastMessage(newMessage);
 
     setMessage('');
+    setIsEmojiPickerOpen(false);
   }
 
   const updateLastMessage = async (newMessage) => {
@@ -53,34 +56,53 @@ const MessageInput = ({ chatRoom }) => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.root}
+      style={[styles.root, { height: isEmojiPickerOpen ? "50%" : "auto" }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={100}
     >
-      <View style={styles.inputContainer}>
-        <SimpleLineIcons name="emotsmile" size={24} color="#595959" style={styles.icon} />
+      <View style={styles.row}>
+        <View style={styles.inputContainer}>
+          {/* () => setIsEmojiPickerOpen(true)だと閉じれないので、押したら今の値と真逆の値（trueとFalse）を入れ替える */}
+          <Pressable onPress={() => setIsEmojiPickerOpen((currentValue) => !currentValue)}>
+            <SimpleLineIcons
+              name="emotsmile"
+              size={24} color="#595959"
+              style={styles.icon}
+            />
+          </Pressable>
 
-        <TextInput
-          style={styles.input}
-          value={message}
-          onChangeText={setMessage}
-          placeholder="Signal message..."
-        />
+          <TextInput
+            style={styles.input}
+            value={message}
+            onChangeText={setMessage}
+            placeholder="RumoR message..."
+          />
 
-        <Feather name="camera" size={24} color="#595959" style={styles.icon} />
-        <MaterialCommunityIcons name="microphone-outline" size={24} color="#595959" style={styles.icon} />
+          <Feather name="camera" size={24} color="#595959" style={styles.icon} />
+          <MaterialCommunityIcons name="microphone-outline" size={24} color="#595959" style={styles.icon} />
+        </View>
+        <Pressable onPress={onPress} style={styles.buttonContainer}>
+          {message ? <Ionicons name="send" size={18} color="white" /> : <AntDesign name="plus" size={24} color="white" />}
+        </Pressable>
       </View>
-      <Pressable onPress={onPress} style={styles.buttonContainer}>
-        {message ? <Ionicons name="send" size={18} color="white" /> : <AntDesign name="plus" size={24} color="white" />}
-      </Pressable>
+
+      {isEmojiPickerOpen && (
+        <EmojiSelector
+          // emoj=>の跡が送信知る部分
+          onEmojiSelected={(emoji) => setMessage(currentMessage => currentMessage + emoji)}
+          columns={8}
+        />
+      )}
     </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
   root: {
-    flexDirection: 'row',
     padding: 10,
+  },
+  row: {
+    flexDirection: 'row',
   },
   inputContainer: {
     backgroundColor: '#f2f2f2',

@@ -3,8 +3,8 @@ import { Text, View, Image, useWindowDimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Auth, DataStore } from "aws-amplify";
 import { ChatRoomUser, User } from "../src/models";
-
-const ChatRoomHeader = ({ id, children }) => {
+// ({id, children})でWarning、理由はChildrenが使われてないから
+const ChatRoomHeader = ({ id }) => {
   const { width } = useWindowDimensions();
   const [user, setUser] = useState<User | null>(null);
   // ↓ここのuseEffectはChatRoomItem.tsxからのコピペ
