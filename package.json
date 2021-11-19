@@ -27,6 +27,7 @@
     "cli": "^1.0.1",
     "expo": "~42.0.1",
     "expo-asset": "~8.3.2",
+    "expo-av": "~9.2.3",
     "expo-constants": "~11.0.1",
     "expo-font": "~9.2.1",
     "expo-image-picker": "~10.2.2",

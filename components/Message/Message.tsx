@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, useWindowDimensions } from 'react-native';
 import { DataStore } from '@aws-amplify/datastore';
 import { User } from '../../src/models';
-import { Auth } from 'aws-amplify';
+import { Auth, Storage } from 'aws-amplify';
 import { S3Image } from 'aws-amplify-react-native';
+import AudioPlayer from '../AudioPlayer';
 
 const blue = '#8a2be2'; // blueviolet
 const grey = 'lightgrey';
@@ -11,12 +12,19 @@ const grey = 'lightgrey';
 const Message = ({ message }) => {
   const [user, setUser] = useState<User | undefined>();
   const [isMe, setIsMe] = useState<boolean>(false);
+  const [soundURI, setSoundURI] = useState<any>(null);
 
   const { width } = useWindowDimensions();
 
   useEffect(() => {
     DataStore.query(User, message.userID).then(setUser);
   }, []);
+
+  useEffect(() => {
+    if (message.audio) {
+      Storage.get(message.audio).then(setSoundURI);
+    }
+  }, [message])
 
   useEffect(() => {
     const checkIfMe = async () => {
@@ -27,7 +35,7 @@ const Message = ({ message }) => {
       setIsMe(user.id === authUser.attributes.sub);
     }
     checkIfMe();
-  }, [user])
+  }, [user]);
 
   if (!user) {
     return <ActivityIndicator />
@@ -38,6 +46,7 @@ const Message = ({ message }) => {
       style={[
         styles.container,
         isMe ? styles.rightContainer : styles.leftContainer,
+        { width: soundURI ? "75%" : "auto" },
       ]}
     >
       {message.image && (
@@ -50,8 +59,9 @@ const Message = ({ message }) => {
           />
         </View>
       )}
+      {soundURI && <AudioPlayer soundURI={soundURI} />}
       {/* 写真送信時の不自然な下の余白を消す↓ 上のmarginBottomも調整 */}
-      {!!message.content && (
+      {!!message.audio && (
         <Text style={{ color: isMe ? 'black' : 'white' }}>
           {message.content}
         </Text>
